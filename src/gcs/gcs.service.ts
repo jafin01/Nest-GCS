@@ -2,7 +2,9 @@ import { Storage } from '@google-cloud/storage';
 import { Injectable } from '@nestjs/common';
 import { promisify } from 'util';
 import * as fs from 'fs';
-import { join } from 'path';
+import { InjectModel } from '@nestjs/mongoose';
+import { Crud } from 'src/schemas/crud.schema';
+import mongoose from 'mongoose';
 
 const writeFileAsync = promisify(fs.writeFile);
 
@@ -11,8 +13,10 @@ export class GcsService {
   private storage: Storage;
   private bucketName: string;
 
-  constructor() {
-    // const keyFilePath = join(__dirname, '../.././config/gcs/storage-key.json');
+  constructor(
+    @InjectModel(Crud.name)
+    private readonly Crud: mongoose.Model<Crud>,
+  ) {
     const credentialsPath =
       '/Users/hammymy/Developer/nest-gcp/configs/gcs/storage-key.json';
     const credentials = JSON.parse(fs.readFileSync(credentialsPath).toString());
