@@ -9,18 +9,10 @@ export class CrudController {
   constructor(private readonly crudService: CrudService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('product-image'))
-  async uploadFile(
-    @UploadedFile() file: Express.Multer.File & { buffer: Buffer },
-    @Body() createDto: CreateDto,
-  ) {
+  async createSomething(@Body() createDto: CreateDto) {
     try {
-      const uploadedUrl = await this.crudService.createSomething(
-        createDto,
-        file,
-        `product-images/${file.originalname}`,
-      );
-      return 'uploadedUrl';
+      const createdItem = await this.crudService.createSomething(createDto);
+      return createdItem;
     } catch (error) {
       return error.message;
     }
