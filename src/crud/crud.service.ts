@@ -12,12 +12,20 @@ export class CrudService {
     private readonly Crud: mongoose.Model<Crud>,
   ) {}
 
-  async createSomething(createDto, file, destination: string) {
-    const { name, price, description, category, quantity } = createDto;
+  async createSomething(createDto) {
+    const { name, price, description, category, quantity, image } = createDto;
 
     try {
-      const uploadedUrl = await this.gcsService.uploadFile(file, destination);
-      console.log('uploadedUrl', uploadedUrl);
+      const newCrud = this.Crud.create({
+        name,
+        price,
+        description,
+        category,
+        quantity,
+        image,
+      });
+
+      return newCrud;
     } catch (error) {
       return error.message;
     }
